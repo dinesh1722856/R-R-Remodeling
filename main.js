@@ -72,13 +72,14 @@ navLinks.forEach(link => {
 });
 
 // ================================
-// Counter Animation
+// Counter Animation (FIXED: suffix logic)
 // ================================
 function animateCounters() {
     const counters = document.querySelectorAll('.stat-number');
     
     counters.forEach(counter => {
         const target = parseInt(counter.getAttribute('data-target'));
+        const suffix = target === 90 ? '%' : '+'; // FIX: 90 = Satisfaction %, baaki = +
         const duration = 2000; // 2 seconds
         const increment = target / (duration / 16); // 60fps
         let current = 0;
@@ -89,7 +90,7 @@ function animateCounters() {
                 counter.textContent = Math.floor(current);
                 requestAnimationFrame(updateCounter);
             } else {
-                counter.textContent = target + (counter.getAttribute('data-target') === '98' ? '%' : '+');
+                counter.textContent = target + suffix;
             }
         };
         
@@ -141,15 +142,11 @@ function initScrollAnimations() {
 initScrollAnimations();
 
 // ================================
-// Chat Button Functionality
+// Chat Button Functionality (FIXED: no alert, direct scroll to contact)
 // ================================
 const chatButton = document.getElementById('chatButton');
 
 chatButton.addEventListener('click', () => {
-    // Simulate opening a chat window
-    alert("Thanks for your interest! In a production environment, this would open a live chat widget.\n\nFor now, please call us at 123-456-7890 or use the contact form below.");
-    
-    // Optionally scroll to contact section
     document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
 });
 
@@ -208,18 +205,11 @@ window.addEventListener('scroll', () => {
 });
 
 // ================================
-// Portfolio Item Click Handler
+// Portfolio Item Click Handler (FIXED: no alert popup)
 // ================================
-const portfolioItems = document.querySelectorAll('.portfolio-item');
-
-portfolioItems.forEach(item => {
-    item.addEventListener('click', () => {
-        const title = item.querySelector('.portfolio-title').textContent;
-        const category = item.querySelector('.portfolio-category').textContent;
-        
-        alert(`${title}\nCategory: ${category}\n\nIn a production environment, this would open a detailed portfolio view with more images and project information.`);
-    });
-});
+// Portfolio items ab sirf display ke liye hain - koi popup nahi.
+// Future me yahan lightbox add kar sakte ho:
+// portfolioItems.forEach(item => item.addEventListener('click', openLightbox));
 
 // ================================
 // Lazy Loading Images
@@ -243,15 +233,19 @@ if ('IntersectionObserver' in window) {
 }
 
 // ================================
-// Social Links Handler
+// Social Links Handler (FIXED - Yahi main problem thi)
 // ================================
-const socialLinks = document.querySelectorAll('.social-link');
-
-socialLinks.forEach(link => {
+// Pehle ye handler sabhi social links ko intercept karke
+// e.preventDefault() + alert() kar raha tha, jisse Instagram
+// waghera khul hi nahi rahe the.
+// HTML me already real URLs hain (target="_blank" ke saath),
+// isliye ab koi intercept NAHI karenge - browser khud
+// link ko new tab me khol dega.
+//
+// Sirf placeholder links (href="#") ko handle karna hai agar kabhi ho:
+document.querySelectorAll('a[href="#"]').forEach(link => {
     link.addEventListener('click', (e) => {
         e.preventDefault();
-        const platform = link.querySelector('i').classList[1].replace('fa-', '');
-        alert(`This would link to our ${platform} profile.\n\nIn production, replace # with actual social media URLs.`);
     });
 });
 
@@ -265,15 +259,6 @@ window.addEventListener('load', () => {
     setTimeout(() => {
         document.body.style.opacity = '1';
     }, 100);
-});
-
-// ================================
-// Prevent Default Link Behavior for Demo Links
-// ================================
-document.querySelectorAll('a[href="#"]').forEach(link => {
-    link.addEventListener('click', (e) => {
-        e.preventDefault();
-    });
 });
 
 // ================================
@@ -356,11 +341,15 @@ window.addEventListener('scroll', debouncedScrollHandler);
 // ================================
 
 // Add keyboard navigation support for portfolio items
+const portfolioItems = document.querySelectorAll('.portfolio-item');
+
 portfolioItems.forEach(item => {
     item.setAttribute('tabindex', '0');
     item.addEventListener('keypress', (e) => {
         if (e.key === 'Enter' || e.key === ' ') {
-            item.click();
+            e.preventDefault();
+            item.style.transform = 'scale(0.98)';
+            setTimeout(() => { item.style.transform = ''; }, 150);
         }
     });
 });
@@ -372,18 +361,17 @@ navLinks.forEach(link => {
 });
 
 // ================================
-// Console Welcome Message
+// Console Welcome Message (FIXED: brand name)
 // ================================
-console.log('%c🏠 M&B Remodeling', 'font-size: 24px; font-weight: bold; color: #FF6B35;');
+console.log('%c🏠 R&R Remodeling', 'font-size: 24px; font-weight: bold; color: #FF6B35;');
 console.log('%cWelcome to our website! We create exceptional living spaces.', 'font-size: 14px; color: #8B6F47;');
-console.log('%cInterested in working with us? Contact: info@mbremodeling.com', 'font-size: 12px; color: #666;');
+console.log('%cInterested in working with us? Contact: dineshsaini1722856@gmail.com', 'font-size: 12px; color: #666;');
 
 // ================================
 // Error Handling
 // ================================
 window.addEventListener('error', (e) => {
     console.error('An error occurred:', e.error);
-    // In production, you might want to log this to an error tracking service
 });
 
 // ================================
