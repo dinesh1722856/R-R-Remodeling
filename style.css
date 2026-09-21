@@ -269,8 +269,8 @@ button {
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    background: linear-gradient(135deg, rgba(44, 44, 44, 0.7), rgba(139, 111, 71, 0.4)), 
-                url('/assets/image/main-1.jpg') center/cover no-repeat;
+   background: linear-gradient(135deg, rgba(44, 44, 44, 0.7), rgba(139, 111, 71, 0.4)), 
+            url('./assets/image/main-1.jpg') center/cover no-repeat;
     background-attachment: fixed;
     padding: 0 60px;
 }
